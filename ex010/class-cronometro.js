@@ -1,9 +1,16 @@
 import {Temporizador} from "./cronometro.js"
 import {Dados} from "./dados.js"
 
-recuperaCronometro()
-
 let temporizador = new Temporizador();
+let dados = new Dados()
+let recarregar = dados.recuperaCronometro()
+
+document.querySelector("#tens").innerHTML = recarregar[1].toString().padStart(2, "0")
+document.querySelector("#seconds").innerHTML = recarregar[0].toString().padStart(2, "0")
+
+temporizador.segundos = recarregar[0]
+temporizador.dezenasMilissegundos = recarregar[1]
+
 
 var btnStart = document.querySelector('#button-start');
 var btnStop = document.querySelector('#button-stop');
@@ -15,22 +22,14 @@ btnStart.addEventListener("click", function () {
 
 btnStop.addEventListener("click", function () {
   temporizador.parar();
-  let dados = new Dados(temporizador.segundos, temporizador.dezenasMilissegundos)
-  dados.salvarCronometro()
+  dados.salvarCronometro(temporizador.segundos, temporizador.dezenasMilissegundos)
 });
 
 btnReset.addEventListener("click", function () {
   temporizador.reset();
-  dados.salvarCronometro()
+  dados.salvarCronometro(temporizador.segundos, temporizador.dezenasMilissegundos)
 });
 
-function recuperaCronometro() {
-  let recuperaSegundos = localStorage.getItem("dado-segundos")
-  let recuperaMili = localStorage.getItem("dado-mili")
-  let JSONseconds = JSON.parse(recuperaSegundos)
-  let JSONmilis = JSON.parse(recuperaMili)
-  document.querySelector("#tens").innerHTML = JSONmilis.toString().padStart(2, "0")
-  document.querySelector("#seconds").innerHTML = JSONseconds.toString().padStart(2, "0")
-}
+
 
 
